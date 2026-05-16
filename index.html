@@ -411,10 +411,24 @@ function goTo(id) {
   }
 }
 
-// ── Wire up navigation buttons ──
-document.getElementById('btn-to-part2').addEventListener('click', function() { goTo('sec-part2'); });
-document.getElementById('btn-skip-part2').addEventListener('click', function() { goTo('sec-followup'); });
-document.getElementById('btn-to-followup').addEventListener('click', function() { goTo('sec-followup'); });
+// ── Wire up navigation buttons inside DOMContentLoaded ──
+// This guarantees the DOM is fully ready before attaching listeners
+document.addEventListener('DOMContentLoaded', function() {
+  function wire(id, dest) {
+    var btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener('click', function() { goTo(dest); });
+    }
+  }
+  wire('btn-to-part2',   'sec-part2');
+  wire('btn-skip-part2', 'sec-followup');
+  wire('btn-to-followup','sec-followup');
+
+  var submitBtn = document.getElementById('submit-btn');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', function() { handleSubmit(); });
+  }
+});
 
 // ── Visual highlight on selection ──
 document.addEventListener('change', function(e) {
@@ -520,8 +534,8 @@ function collectResponses() {
   };
 }
 
-// ── Submit ──
-document.getElementById('submit-btn').addEventListener('click', function() {
+// ── Submit handler ──
+function handleSubmit() {
   var btn = document.getElementById('submit-btn');
   var st  = document.getElementById('submit-status');
   btn.disabled = true;
@@ -549,7 +563,7 @@ document.getElementById('submit-btn').addEventListener('click', function() {
     st.textContent = 'Something went wrong - please try again.';
     st.className = 'submit-status error';
   });
-});
+}
 </script>
 
 </body>
