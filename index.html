@@ -93,8 +93,7 @@ body { min-height: 100vh; font-family: 'DM Sans', sans-serif; background: #1a2e2
 .btn-row .btn-primary { flex: 1; }
 
 /* Sections */
-.survey-section { display: none !important; }
-.survey-section.active { display: block !important; }
+.survey-section { } .survey-section.active { }
 
 /* Inputs */
 .text-input { width: 100%; padding: 11px 14px; border: 1.5px solid rgba(45,74,62,.2); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--forest); background: rgba(255,255,255,.6); outline: none; resize: vertical; }
@@ -129,7 +128,7 @@ body { min-height: 100vh; font-family: 'DM Sans', sans-serif; background: #1a2e2
   </div>
 
   <!-- ── PART 1 ── -->
-  <div class="survey-section active" id="sec-part1">
+  <div class="survey-section active" id="sec-part1" style="display:block">
     <div class="part-divider">
       <div class="part-badge">Part 1 of 2</div>
       <h2>Core Questions</h2>
@@ -247,14 +246,14 @@ body { min-height: 100vh; font-family: 'DM Sans', sans-serif; background: #1a2e2
       <h3>That's Part 1 done! &#127881;</h3>
       <p>Would you answer a few more questions? About 3 more minutes &mdash; helps us design gear that works for real bodies on real trails.</p>
       <div class="btn-row">
-        <button type="button" id="btn-to-part2" class="btn-primary">Yes, continue to Part 2 &rarr;</button>
-        <button type="button" id="btn-skip-part2" class="btn-secondary">No thanks</button>
+        <button type="button" onclick="goTo('sec-part2')" class="btn-primary">Yes, continue to Part 2 &rarr;</button>
+        <button type="button" onclick="goTo('sec-followup')" class="btn-secondary">No thanks</button>
       </div>
     </div>
   </div>
 
   <!-- ── PART 2 ── -->
-  <div class="survey-section" id="sec-part2">
+  <div class="survey-section" id="sec-part2" style="display:none">
     <div class="part-divider">
       <div class="part-badge">Part 2 of 2</div>
       <h2>Deeper Dive</h2>
@@ -354,11 +353,11 @@ body { min-height: 100vh; font-family: 'DM Sans', sans-serif; background: #1a2e2
       </div>
     </div>
 
-    <button type="button" id="btn-to-followup" class="btn-primary" style="margin-bottom:16px">Continue &rarr;</button>
+    <button type="button" onclick="goTo('sec-followup')" class="btn-primary" style="margin-bottom:16px">Continue &rarr;</button>
   </div>
 
   <!-- ── FOLLOW UP ── -->
-  <div class="survey-section" id="sec-followup">
+  <div class="survey-section" id="sec-followup" style="display:none">
     <div class="card">
       <div class="section-label">Follow-Up &mdash; Optional</div>
       <div class="question">
@@ -376,13 +375,13 @@ body { min-height: 100vh; font-family: 'DM Sans', sans-serif; background: #1a2e2
         </div>
         <p style="font-size:11.5px; color:var(--stone); margin-top:8px; font-style:italic">Contact info used only for follow-up and kept confidential.</p>
       </div>
-      <button type="button" id="submit-btn" class="btn-primary" style="margin-top:16px">Submit Survey &#10003;</button>
+      <button type="button" onclick="handleSubmit()" class="btn-primary" style="margin-top:16px">Submit Survey &#10003;</button>
       <div id="submit-status" class="submit-status"></div>
     </div>
   </div>
 
   <!-- ── THANK YOU ── -->
-  <div class="survey-section" id="sec-thankyou">
+  <div class="survey-section" id="sec-thankyou" style="display:none">
     <div class="thankyou-card">
       <span class="check">&#127956;</span>
       <h2>Thank you for your time!</h2>
@@ -393,64 +392,36 @@ body { min-height: 100vh; font-family: 'DM Sans', sans-serif; background: #1a2e2
 </div><!-- /container -->
 
 <script>
-// ─────────────────────────────────────────
-// PASTE YOUR APPS SCRIPT WEB APP URL HERE
-// ─────────────────────────────────────────
-var SCRIPT_URL = https://script.google.com/macros/s/AKfycbyfbnNZxBmpg8jpVc3sKVCgRSqSw01TeG72pyiOhXQXb8912FlmjVDA6QHyvkgOKHK_/exec;
+var SCRIPT_URL = https://script.google.com/macros/s/AKfycbzuB4G8u2ERFmXmfWm714KrEJuyggLQCguOVoweJqaZ115Ngjpx9BOXKtHi7OryKwBa/exec;
 
-// ── Section navigation ──
 function goTo(id) {
-  var sections = document.querySelectorAll('.survey-section');
-  for (var i = 0; i < sections.length; i++) {
-    sections[i].classList.remove('active');
+  var all = document.querySelectorAll('.survey-section');
+  for (var i = 0; i < all.length; i++) {
+    all[i].style.display = 'none';
   }
-  var target = document.getElementById(id);
-  if (target) {
-    target.classList.add('active');
+  var el = document.getElementById(id);
+  if (el) {
+    el.style.display = 'block';
     window.scrollTo(0, 0);
   }
 }
 
-// ── Wire up navigation buttons inside DOMContentLoaded ──
-// This guarantees the DOM is fully ready before attaching listeners
-document.addEventListener('DOMContentLoaded', function() {
-  function wire(id, dest) {
-    var btn = document.getElementById(id);
-    if (btn) {
-      btn.addEventListener('click', function() { goTo(dest); });
-    }
-  }
-  wire('btn-to-part2',   'sec-part2');
-  wire('btn-skip-part2', 'sec-followup');
-  wire('btn-to-followup','sec-followup');
-
-  var submitBtn = document.getElementById('submit-btn');
-  if (submitBtn) {
-    submitBtn.addEventListener('click', function() { handleSubmit(); });
-  }
-});
-
-// ── Visual highlight on selection ──
 document.addEventListener('change', function(e) {
   var input = e.target;
-  var item  = input.closest('.option-item');
+  var item = input.closest('.option-item');
   if (!item) return;
-
   if (input.type === 'radio') {
     var group = document.querySelectorAll('input[name="' + input.name + '"]');
     for (var i = 0; i < group.length; i++) {
       group[i].closest('.option-item').classList.remove('selected');
     }
     item.classList.add('selected');
-    // Contact fields for Q16
     if (input.name === 'q16') {
-      var show = (input.value === 'Yes' || input.value === 'Maybe');
-      document.getElementById('contact-fields').style.display = show ? 'block' : 'none';
+      var cf = document.getElementById('contact-fields');
+      cf.style.display = (input.value === 'Yes' || input.value === 'Maybe') ? 'block' : 'none';
     }
   }
-
   if (input.type === 'checkbox') {
-    // Enforce max 3 for Q13
     if (input.name === 'q13' && input.checked) {
       var checked = document.querySelectorAll('input[name="q13"]:checked');
       if (checked.length > 3) { input.checked = false; return; }
@@ -459,7 +430,6 @@ document.addEventListener('change', function(e) {
   }
 });
 
-// ── Drag-to-rank ──
 var rankList = document.getElementById('rank-list');
 var dragSrc = null;
 if (rankList) {
@@ -469,7 +439,8 @@ if (rankList) {
   });
   rankList.addEventListener('dragend', function() {
     if (dragSrc) dragSrc.style.opacity = '';
-    reNumberRanks();
+    var items = document.querySelectorAll('#rank-list .rank-item');
+    for (var i = 0; i < items.length; i++) items[i].querySelector('.rank-num').textContent = i + 1;
   });
   rankList.addEventListener('dragover', function(e) {
     e.preventDefault();
@@ -480,90 +451,37 @@ if (rankList) {
     }
   });
 }
-function reNumberRanks() {
-  var items = document.querySelectorAll('#rank-list .rank-item');
-  for (var i = 0; i < items.length; i++) {
-    items[i].querySelector('.rank-num').textContent = i + 1;
-  }
-}
 
-// ── Collect all responses ──
-function collectResponses() {
-  function getRadio(name) {
-    var el = document.querySelector('input[name="' + name + '"]:checked');
-    return el ? el.value : '';
-  }
-  function getCheckboxes(name) {
-    var els = document.querySelectorAll('input[name="' + name + '"]:checked');
-    var vals = [];
-    for (var i = 0; i < els.length; i++) vals.push(els[i].value);
-    return vals;
-  }
-  function getRanking() {
-    var items = document.querySelectorAll('#rank-list .rank-item');
-    var vals = [];
-    for (var i = 0; i < items.length; i++) vals.push(items[i].dataset.val);
-    return vals;
-  }
-  var q10 = getRadio('q10');
-  var otherEl = document.getElementById('q10-other');
-  if (q10 === 'Other' && otherEl && otherEl.value.trim()) {
-    q10 = 'Other: ' + otherEl.value.trim();
-  }
-  var q15el = document.getElementById('q15-text');
-  var nameEl = document.getElementById('contact-name');
-  var emailEl = document.getElementById('contact-email');
-  return {
-    q1:  getRadio('q1'),
-    q2:  getCheckboxes('q2'),
-    q3:  getRadio('q3'),
-    q4:  getRadio('q4'),
-    q5:  getCheckboxes('q5'),
-    q6:  getRadio('q6'),
-    q7:  getRadio('q7'),
-    q8:  getRadio('q8'),
-    q10: q10,
-    q11: getRadio('q11'),
-    q12: getCheckboxes('q12'),
-    q13: getCheckboxes('q13'),
-    q14: getRanking(),
-    q15: q15el  ? q15el.value  : '',
-    q16: getRadio('q16'),
-    name:  nameEl  ? nameEl.value  : '',
-    email: emailEl ? emailEl.value : ''
-  };
-}
-
-// ── Submit handler ──
 function handleSubmit() {
-  var btn = document.getElementById('submit-btn');
-  var st  = document.getElementById('submit-status');
-  btn.disabled = true;
-  btn.textContent = 'Submitting...';
-  st.textContent = '';
-
-  var data = collectResponses();
-
+  var btn = document.querySelector('[onclick="handleSubmit()"]');
+  var st = document.getElementById('submit-status');
+  if (btn) btn.disabled = true;
+  var data = {
+    q1: val('q1'), q2: vals('q2'), q3: val('q3'), q4: val('q4'),
+    q5: vals('q5'), q6: val('q6'), q7: val('q7'), q8: val('q8'),
+    q10: val('q10'), q11: val('q11'), q12: vals('q12'), q13: vals('q13'),
+    q14: (function() {
+      var its = document.querySelectorAll('#rank-list .rank-item'), v = [];
+      for (var i = 0; i < its.length; i++) v.push(its[i].dataset.val);
+      return v;
+    })(),
+    q15: (document.getElementById('q15-text') || {value:''}).value,
+    q16: val('q16'),
+    name: (document.getElementById('contact-name') || {value:''}).value,
+    email: (document.getElementById('contact-email') || {value:''}).value
+  };
   if (SCRIPT_URL === 'PASTE_YOUR_SCRIPT_URL_HERE') {
-    console.log('Dev mode - responses:', data);
-    goTo('sec-thankyou');
-    return;
+    goTo('sec-thankyou'); return;
   }
-
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(function() {
-    goTo('sec-thankyou');
-  }).catch(function() {
-    btn.disabled = false;
-    btn.textContent = 'Submit Survey';
-    st.textContent = 'Something went wrong - please try again.';
-    st.className = 'submit-status error';
-  });
+  fetch(SCRIPT_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)})
+    .then(function() { goTo('sec-thankyou'); })
+    .catch(function() {
+      if (btn) btn.disabled = false;
+      if (st) { st.textContent = 'Something went wrong - please try again.'; st.className = 'submit-status error'; }
+    });
 }
+function val(n) { var el = document.querySelector('input[name="'+n+'"]:checked'); return el ? el.value : ''; }
+function vals(n) { var els = document.querySelectorAll('input[name="'+n+'"]:checked'), v = []; for (var i=0;i<els.length;i++) v.push(els[i].value); return v; }
 </script>
 
 </body>
