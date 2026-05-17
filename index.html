@@ -6,483 +6,371 @@
 <title>Hiking Backpack Experience Survey</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --cream: #f5f0e8; --forest: #2d4a3e; --moss: #4a6741;
-  --gold: #c8a84b; --stone: #8b7355; --glass: rgba(245,240,232,0.92);
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { min-height: 100vh; font-family: 'DM Sans', sans-serif; background: #1a2e25; color: var(--forest); }
-
-.bg-fixed {
-  position: fixed; inset: 0; z-index: 0;
-  background: url('background.jpg') center/cover no-repeat;
-}
-.bg-overlay {
-  position: fixed; inset: 0; z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(160deg, rgba(15,28,22,.65) 0%, rgba(30,55,42,.5) 50%, rgba(20,38,30,.7) 100%);
-}
-.container {
-  position: relative; z-index: 2;
-  max-width: 680px; margin: 0 auto; padding: 32px 20px 80px;
-}
-
-/* Header */
-.survey-header { text-align: center; padding: 56px 32px 40px; margin-bottom: 24px; }
-.eyebrow { font-size: 11px; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
-.survey-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px,6vw,42px); font-weight: 600; color: var(--cream); line-height: 1.15; margin-bottom: 16px; }
-.survey-header h1 em { font-style: italic; color: var(--gold); }
-.survey-header p { font-size: 14px; color: rgba(245,240,232,.78); line-height: 1.6; max-width: 440px; margin: 0 auto; }
-
-/* Cards */
-.card { background: var(--glass); border-radius: 16px; padding: 28px 32px; margin-bottom: 16px; backdrop-filter: blur(12px); border: 1px solid rgba(245,240,232,.3); box-shadow: 0 8px 32px rgba(0,0,0,.18); }
-
-.section-label { font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--moss); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-.section-label::after { content: ''; flex: 1; height: 1px; background: rgba(74,103,65,.25); }
-
-.question { margin-bottom: 24px; }
-.question:last-child { margin-bottom: 0; }
-.q-label { font-size: 15px; font-weight: 500; color: var(--forest); line-height: 1.45; margin-bottom: 12px; }
-.q-num { font-size: 11px; font-weight: 500; color: var(--stone); letter-spacing: .08em; display: block; margin-bottom: 4px; }
-.hint { font-size: 12px; color: var(--stone); font-style: italic; background: rgba(139,115,85,.1); border-left: 2px solid var(--gold); padding: 8px 12px; border-radius: 0 6px 6px 0; margin-bottom: 12px; line-height: 1.5; }
-
-/* Option items — label wraps input for native click-anywhere */
-.options { display: flex; flex-direction: column; gap: 7px; }
-.option-item {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 10px 14px; border-radius: 8px;
-  border: 1.5px solid rgba(45,74,62,.18);
-  cursor: pointer; background: rgba(255,255,255,.45);
-  transition: background .15s, border-color .15s;
-  user-select: none;
-}
-.option-item:hover { background: rgba(200,168,75,.12); border-color: var(--gold); }
-.option-item.selected { background: rgba(74,103,65,.12); border-color: var(--moss); }
-.option-item input[type="radio"],
-.option-item input[type="checkbox"] { flex-shrink: 0; margin-top: 2px; accent-color: var(--moss); width: 15px; height: 15px; cursor: pointer; }
-.option-item span { font-size: 13.5px; color: var(--forest); line-height: 1.4; }
-.sub-heading { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--stone); padding: 8px 0 2px; font-weight: 500; }
-.other-input { border: none; border-bottom: 1px solid var(--stone); background: transparent; width: 140px; font-size: 13px; outline: none; padding: 0 4px; font-family: 'DM Sans', sans-serif; cursor: text; }
-
-/* Rank */
-.rank-list { display: flex; flex-direction: column; gap: 7px; }
-.rank-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: rgba(255,255,255,.5); border: 1.5px solid rgba(45,74,62,.15); border-radius: 8px; cursor: grab; user-select: none; }
-.rank-item:active { cursor: grabbing; }
-.rank-num { width: 24px; height: 24px; background: var(--forest); color: var(--cream); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
-.rank-drag { color: var(--stone); font-size: 18px; flex-shrink: 0; }
-.rank-text { font-size: 13.5px; color: var(--forest); }
-
-/* Part divider */
-.part-divider { text-align: center; padding: 32px 24px 16px; }
-.part-badge { display: inline-block; background: var(--forest); color: var(--cream); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 12px; }
-.part-divider h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--cream); margin-bottom: 8px; }
-.part-divider p { font-size: 13px; color: rgba(245,240,232,.7); max-width: 380px; margin: 0 auto; }
-
-/* Transition card */
-.transition-card { background: var(--glass); border-radius: 16px; padding: 32px; text-align: center; backdrop-filter: blur(12px); border: 1px solid rgba(245,240,232,.3); margin-bottom: 16px; }
-.transition-card h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--forest); margin-bottom: 10px; }
-.transition-card p { font-size: 13.5px; color: var(--stone); line-height: 1.6; margin-bottom: 20px; }
-
-/* Buttons */
-.btn-primary { display: block; width: 100%; padding: 15px 28px; background: var(--forest); color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; text-align: center; border: none; border-radius: 10px; cursor: pointer; transition: background .2s; margin-top: 8px; }
-.btn-primary:hover { background: var(--moss); }
-.btn-primary:disabled { opacity: .6; cursor: not-allowed; }
-.btn-secondary { padding: 12px 24px; background: transparent; color: var(--forest); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; border: 1.5px solid rgba(45,74,62,.35); border-radius: 10px; cursor: pointer; margin-top: 8px; }
-.btn-secondary:hover { border-color: var(--forest); }
-.btn-row { display: flex; gap: 12px; }
-.btn-row .btn-primary { flex: 1; }
-
-/* Sections */
-.survey-section { } .survey-section.active { }
-
-/* Inputs */
-.text-input { width: 100%; padding: 11px 14px; border: 1.5px solid rgba(45,74,62,.2); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--forest); background: rgba(255,255,255,.6); outline: none; resize: vertical; }
-.text-input:focus { border-color: var(--moss); }
-
-/* Thank you */
-.thankyou-card { background: var(--glass); border-radius: 20px; padding: 56px 40px; text-align: center; backdrop-filter: blur(12px); border: 1px solid rgba(245,240,232,.3); }
-.thankyou-card .check { font-size: 52px; margin-bottom: 20px; display: block; }
-.thankyou-card h2 { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--forest); margin-bottom: 12px; }
-.thankyou-card p { font-size: 14px; color: var(--stone); line-height: 1.7; max-width: 380px; margin: 0 auto; }
-.submit-status { font-size: 12.5px; text-align: center; margin-top: 10px; color: var(--stone); }
-.submit-status.error { color: #c0392b; }
-
-@media (max-width: 520px) {
-  .container { padding: 20px 14px 60px; }
-  .card { padding: 22px 18px; }
-  .survey-header { padding: 40px 16px 28px; }
-}
+:root{--cream:#f5f0e8;--forest:#2d4a3e;--moss:#4a6741;--gold:#c8a84b;--stone:#8b7355;--glass:rgba(245,240,232,0.92)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:'DM Sans',sans-serif;background:#1a2e25;color:var(--forest)}
+.bg-fixed{position:fixed;inset:0;z-index:0;background:url('background.jpg') center/cover no-repeat}
+.bg-overlay{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(160deg,rgba(15,28,22,.65) 0%,rgba(30,55,42,.5) 50%,rgba(20,38,30,.7) 100%)}
+.wrap{position:relative;z-index:2;max-width:680px;margin:0 auto;padding:32px 20px 80px}
+.hdr{text-align:center;padding:56px 32px 40px;margin-bottom:24px}
+.hdr .ey{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.hdr h1{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,42px);font-weight:600;color:var(--cream);line-height:1.15;margin-bottom:16px}
+.hdr h1 em{font-style:italic;color:var(--gold)}
+.hdr p{font-size:14px;color:rgba(245,240,232,.78);line-height:1.6;max-width:440px;margin:0 auto}
+.card{background:var(--glass);border-radius:16px;padding:28px 32px;margin-bottom:16px;backdrop-filter:blur(12px);border:1px solid rgba(245,240,232,.3);box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.sl{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--moss);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.sl::after{content:'';flex:1;height:1px;background:rgba(74,103,65,.25)}
+.q{margin-bottom:24px}.q:last-child{margin-bottom:0}
+.ql{font-size:15px;font-weight:500;color:var(--forest);line-height:1.45;margin-bottom:12px}
+.qn{font-size:11px;font-weight:500;color:var(--stone);letter-spacing:.08em;display:block;margin-bottom:4px}
+.hint{font-size:12px;color:var(--stone);font-style:italic;background:rgba(139,115,85,.1);border-left:2px solid var(--gold);padding:8px 12px;border-radius:0 6px 6px 0;margin-bottom:12px;line-height:1.5}
+.opts{display:flex;flex-direction:column;gap:7px}
+label.oi{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;border:1.5px solid rgba(45,74,62,.18);cursor:pointer;background:rgba(255,255,255,.45);transition:background .15s,border-color .15s;user-select:none}
+label.oi:hover{background:rgba(200,168,75,.12);border-color:var(--gold)}
+label.oi.sel{background:rgba(74,103,65,.12);border-color:var(--moss)}
+label.oi input{flex-shrink:0;margin-top:2px;accent-color:var(--moss);width:15px;height:15px;cursor:pointer}
+label.oi span{font-size:13.5px;color:var(--forest);line-height:1.4}
+.sh{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);padding:8px 0 2px;font-weight:500}
+.oth{border:none;border-bottom:1px solid var(--stone);background:transparent;width:140px;font-size:13px;outline:none;padding:0 4px;font-family:'DM Sans',sans-serif}
+.rlist{display:flex;flex-direction:column;gap:7px}
+.ri{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,.5);border:1.5px solid rgba(45,74,62,.15);border-radius:8px;cursor:grab;user-select:none}
+.ri:active{cursor:grabbing}
+.rn{width:24px;height:24px;background:var(--forest);color:var(--cream);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.rd{color:var(--stone);font-size:18px;flex-shrink:0}
+.rt{font-size:13.5px;color:var(--forest)}
+.pd{text-align:center;padding:32px 24px 16px}
+.pb{display:inline-block;background:var(--forest);color:var(--cream);font-size:11px;letter-spacing:.15em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:12px}
+.pd h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin-bottom:8px}
+.pd p{font-size:13px;color:rgba(245,240,232,.7);max-width:380px;margin:0 auto}
+.tc{background:var(--glass);border-radius:16px;padding:32px;text-align:center;backdrop-filter:blur(12px);border:1px solid rgba(245,240,232,.3);margin-bottom:16px}
+.tc h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--forest);margin-bottom:10px}
+.tc p{font-size:13.5px;color:var(--stone);line-height:1.6;margin-bottom:20px}
+.bp{display:block;width:100%;padding:15px 28px;background:var(--forest);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;text-align:center;border:none;border-radius:10px;cursor:pointer;transition:background .2s;margin-top:8px}
+.bp:hover{background:var(--moss)}
+.bs{padding:12px 24px;background:transparent;color:var(--forest);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border:1.5px solid rgba(45,74,62,.35);border-radius:10px;cursor:pointer;margin-top:8px}
+.bs:hover{border-color:var(--forest)}
+.br{display:flex;gap:12px}.br .bp{flex:1}
+.ti{width:100%;padding:11px 14px;border:1.5px solid rgba(45,74,62,.2);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--forest);background:rgba(255,255,255,.6);outline:none;resize:vertical}
+.ti:focus{border-color:var(--moss)}
+.ty{background:var(--glass);border-radius:20px;padding:56px 40px;text-align:center;backdrop-filter:blur(12px);border:1px solid rgba(245,240,232,.3)}
+.ty .ck{font-size:52px;margin-bottom:20px;display:block}
+.ty h2{font-family:'Playfair Display',serif;font-size:28px;color:var(--forest);margin-bottom:12px}
+.ty p{font-size:14px;color:var(--stone);line-height:1.7;max-width:380px;margin:0 auto}
+.ss{font-size:12.5px;text-align:center;margin-top:10px;color:var(--stone)}
+.ss.err{color:#c0392b}
+@media(max-width:520px){.wrap{padding:20px 14px 60px}.card{padding:22px 18px}.hdr{padding:40px 16px 28px}}
 </style>
 </head>
 <body>
-
 <div class="bg-fixed"></div>
 <div class="bg-overlay"></div>
+<div class="wrap">
 
-<div class="container">
+<div class="hdr">
+  <div class="ey">Market Validation Research &middot; v3</div>
+  <h1>Hiking Backpack<br><em>Experience Survey</em></h1>
+  <p>Your trail experience shapes better gear for everyone. Takes about 5 minutes.</p>
+</div>
 
-  <div class="survey-header">
-    <div class="eyebrow">Market Validation Research &middot; v3</div>
-    <h1>Hiking Backpack<br><em>Experience Survey</em></h1>
-    <p>Your trail experience shapes better gear for everyone. Takes about 5 minutes.</p>
-  </div>
-
-  <!-- ── PART 1 ── -->
-  <div class="survey-section active" id="sec-part1" style="display:block">
-    <div class="part-divider">
-      <div class="part-badge">Part 1 of 2</div>
-      <h2>Core Questions</h2>
-      <p>Short enough to answer at a trailhead.</p>
-    </div>
-
-    <div class="card">
-      <div class="section-label">Section 1 &mdash; Your Hiking Profile</div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q1</span>How long have you been backpacking?</div>
-        <div class="options">
-          <label class="option-item"><input type="radio" name="q1" value="Less than 1 year"><span>Less than 1 year</span></label>
-          <label class="option-item"><input type="radio" name="q1" value="1-3 years"><span>1&ndash;3 years</span></label>
-          <label class="option-item"><input type="radio" name="q1" value="3-5 years"><span>3&ndash;5 years</span></label>
-          <label class="option-item"><input type="radio" name="q1" value="5-10 years"><span>5&ndash;10 years</span></label>
-          <label class="option-item"><input type="radio" name="q1" value="10+ years"><span>10+ years</span></label>
-        </div>
-      </div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q2</span>What type of trips do you primarily take? <em style="font-size:12px;color:var(--stone)">(Select all that apply)</em></div>
-        <div class="options">
-          <label class="option-item"><input type="checkbox" name="q2" value="Weekend trips"><span>Weekend trips (1&ndash;2 nights)</span></label>
-          <label class="option-item"><input type="checkbox" name="q2" value="Multi-day trips"><span>Multi-day trips (3&ndash;5 nights)</span></label>
-          <label class="option-item"><input type="checkbox" name="q2" value="Extended trips"><span>Extended trips &amp; mountaineering (6+ nights)</span></label>
-          <label class="option-item"><input type="checkbox" name="q2" value="Thru-hiking"><span>Thru-hiking (PCT, AT, CDT, etc.)</span></label>
-          <label class="option-item"><input type="checkbox" name="q2" value="International trekking"><span>International trekking</span></label>
-        </div>
-      </div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q3</span>What is the typical weight you carry (pack + gear + food)?</div>
-        <div class="options">
-          <label class="option-item"><input type="radio" name="q3" value="Under 20 lbs"><span>Under 20 lbs &mdash; ultralight</span></label>
-          <label class="option-item"><input type="radio" name="q3" value="20-30 lbs"><span>20&ndash;30 lbs &mdash; lightweight</span></label>
-          <label class="option-item"><input type="radio" name="q3" value="30-40 lbs"><span>30&ndash;40 lbs &mdash; moderate</span></label>
-          <label class="option-item"><input type="radio" name="q3" value="40-50 lbs"><span>40&ndash;50 lbs &mdash; heavy</span></label>
-          <label class="option-item"><input type="radio" name="q3" value="50+ lbs"><span>50+ lbs &mdash; expedition</span></label>
-        </div>
+<!-- PART 1 — visible by default -->
+<div id="s1" style="display:block">
+  <div class="pd"><div class="pb">Part 1 of 2</div><h2>Core Questions</h2><p>Short enough to answer at a trailhead.</p></div>
+  <div class="card">
+    <div class="sl">Section 1 &mdash; Your Hiking Profile</div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q1</span>How long have you been backpacking?</div>
+      <div class="opts">
+        <label class="oi"><input type="radio" name="q1" value="Less than 1 year"><span>Less than 1 year</span></label>
+        <label class="oi"><input type="radio" name="q1" value="1-3 years"><span>1&ndash;3 years</span></label>
+        <label class="oi"><input type="radio" name="q1" value="3-5 years"><span>3&ndash;5 years</span></label>
+        <label class="oi"><input type="radio" name="q1" value="5-10 years"><span>5&ndash;10 years</span></label>
+        <label class="oi"><input type="radio" name="q1" value="10+ years"><span>10+ years</span></label>
       </div>
     </div>
-
-    <div class="card">
-      <div class="section-label">Section 2 &mdash; Fit &amp; Comfort</div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q4</span>How satisfied are you with how your current backpack fits your body?</div>
-        <div class="options">
-          <label class="option-item"><input type="radio" name="q4" value="Very satisfied"><span>Very satisfied &mdash; fits perfectly</span></label>
-          <label class="option-item"><input type="radio" name="q4" value="Satisfied"><span>Satisfied &mdash; fits well with minor adjustments</span></label>
-          <label class="option-item"><input type="radio" name="q4" value="Neutral"><span>Neutral &mdash; okay but not ideal</span></label>
-          <label class="option-item"><input type="radio" name="q4" value="Dissatisfied"><span>Dissatisfied &mdash; noticeable fit issues</span></label>
-          <label class="option-item"><input type="radio" name="q4" value="Very dissatisfied"><span>Very dissatisfied &mdash; does not fit well</span></label>
-        </div>
-      </div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q5</span>Have you experienced any of the following fit issues? <em style="font-size:12px;color:var(--stone)">(Select all that apply)</em></div>
-        <div class="options">
-          <label class="option-item"><input type="checkbox" name="q5" value="Shoulder pain"><span>Shoulder pain or pressure points</span></label>
-          <label class="option-item"><input type="checkbox" name="q5" value="Neck pain"><span>Neck pain or discomfort</span></label>
-          <label class="option-item"><input type="checkbox" name="q5" value="Hip belt misfit"><span>Hip belt does not sit correctly on hips</span></label>
-          <label class="option-item"><input type="checkbox" name="q5" value="Torso length"><span>Pack is too long or short for my torso</span></label>
-          <label class="option-item"><input type="checkbox" name="q5" value="Strap width"><span>Shoulder straps too wide or narrow</span></label>
-          <label class="option-item"><input type="checkbox" name="q5" value="Ride height"><span>Pack rides too high or low on my back</span></label>
-          <label class="option-item"><input type="checkbox" name="q5" value="Weight distribution"><span>Weight distribution feels uneven</span></label>
-          <label class="option-item"><input type="checkbox" name="q5" value="Hip belt gap"><span>Hip belt gaps or does not make full contact</span></label>
-          <label class="option-item"><input type="checkbox" name="q5" value="Spine curve"><span>Back panel does not match my spine curve</span></label>
-          <label class="option-item"><input type="checkbox" name="q5" value="None"><span>None of the above</span></label>
-        </div>
-      </div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q6</span>Have you ever experienced pain or injury caused or worsened by a poorly fitting backpack?</div>
-        <div class="options">
-          <label class="option-item"><input type="radio" name="q6" value="Yes multiple times"><span>Yes, multiple times</span></label>
-          <label class="option-item"><input type="radio" name="q6" value="Yes once or twice"><span>Yes, once or twice</span></label>
-          <label class="option-item"><input type="radio" name="q6" value="Maybe"><span>Maybe / not sure</span></label>
-          <label class="option-item"><input type="radio" name="q6" value="No"><span>No, never</span></label>
-        </div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q2</span>What type of trips do you primarily take? <em style="font-size:12px;color:var(--stone)">(Select all that apply)</em></div>
+      <div class="opts">
+        <label class="oi"><input type="checkbox" name="q2" value="Weekend"><span>Weekend trips (1&ndash;2 nights)</span></label>
+        <label class="oi"><input type="checkbox" name="q2" value="Multi-day"><span>Multi-day trips (3&ndash;5 nights)</span></label>
+        <label class="oi"><input type="checkbox" name="q2" value="Extended"><span>Extended trips &amp; mountaineering (6+ nights)</span></label>
+        <label class="oi"><input type="checkbox" name="q2" value="Thru-hiking"><span>Thru-hiking (PCT, AT, CDT, etc.)</span></label>
+        <label class="oi"><input type="checkbox" name="q2" value="International"><span>International trekking</span></label>
       </div>
     </div>
-
-    <div class="card">
-      <div class="section-label">Section 3 &mdash; The Shopping Experience</div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q7</span>How many backpacks did you try before finding one that worked?</div>
-        <div class="options">
-          <label class="option-item"><input type="radio" name="q7" value="1"><span>1 &mdash; first one worked great</span></label>
-          <label class="option-item"><input type="radio" name="q7" value="2-3"><span>2&ndash;3</span></label>
-          <label class="option-item"><input type="radio" name="q7" value="4-5"><span>4&ndash;5</span></label>
-          <label class="option-item"><input type="radio" name="q7" value="6-10"><span>6&ndash;10</span></label>
-          <label class="option-item"><input type="radio" name="q7" value="10+"><span>More than 10</span></label>
-          <label class="option-item"><input type="radio" name="q7" value="Still searching"><span>Still have not found one that works well</span></label>
-        </div>
-      </div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q8</span>How much MORE would you pay for a pack adjusted to fit your body significantly better and reduce injury risk &mdash; vs. a standard $250 backpack?</div>
-        <div class="hint">Think of this like a personalized insole for your shoes &mdash; not a fully custom shoe, but a precision-fitted insole that makes your shoe fit better and feel more comfortable.</div>
-        <div class="options">
-          <label class="option-item"><input type="radio" name="q8" value="Would not pay more"><span>I would not pay more</span></label>
-          <label class="option-item"><input type="radio" name="q8" value="$25-50 more"><span>$25&ndash;$50 more ($275&ndash;$300 total)</span></label>
-          <label class="option-item"><input type="radio" name="q8" value="$50-100 more"><span>$50&ndash;$100 more ($300&ndash;$350 total)</span></label>
-          <label class="option-item"><input type="radio" name="q8" value="$100-150 more"><span>$100&ndash;$150 more ($350&ndash;$400 total)</span></label>
-          <label class="option-item"><input type="radio" name="q8" value="$150-250 more"><span>$150&ndash;$250 more ($400&ndash;$500 total)</span></label>
-          <label class="option-item"><input type="radio" name="q8" value="$250+ more"><span>$250+ more ($500+ total)</span></label>
-        </div>
-      </div>
-    </div>
-
-    <div class="transition-card">
-      <h3>That's Part 1 done! &#127881;</h3>
-      <p>Would you answer a few more questions? About 3 more minutes &mdash; helps us design gear that works for real bodies on real trails.</p>
-      <div class="btn-row">
-        <button type="button" onclick="goTo('sec-part2')" class="btn-primary">Yes, continue to Part 2 &rarr;</button>
-        <button type="button" onclick="goTo('sec-followup')" class="btn-secondary">No thanks</button>
+    <div class="q">
+      <div class="ql"><span class="qn">Q3</span>Typical weight you carry (pack + gear + food)?</div>
+      <div class="opts">
+        <label class="oi"><input type="radio" name="q3" value="Under 20 lbs"><span>Under 20 lbs &mdash; ultralight</span></label>
+        <label class="oi"><input type="radio" name="q3" value="20-30 lbs"><span>20&ndash;30 lbs &mdash; lightweight</span></label>
+        <label class="oi"><input type="radio" name="q3" value="30-40 lbs"><span>30&ndash;40 lbs &mdash; moderate</span></label>
+        <label class="oi"><input type="radio" name="q3" value="40-50 lbs"><span>40&ndash;50 lbs &mdash; heavy</span></label>
+        <label class="oi"><input type="radio" name="q3" value="50+ lbs"><span>50+ lbs &mdash; expedition</span></label>
       </div>
     </div>
   </div>
-
-  <!-- ── PART 2 ── -->
-  <div class="survey-section" id="sec-part2" style="display:none">
-    <div class="part-divider">
-      <div class="part-badge">Part 2 of 2</div>
-      <h2>Deeper Dive</h2>
-      <p>A few more questions about your pack and shopping experience.</p>
-    </div>
-
-    <div class="card">
-      <div class="section-label">Section 4 &mdash; Your Current Pack</div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q10</span>What brand is your primary backpacking pack?</div>
-        <div class="options">
-          <label class="option-item"><input type="radio" name="q10" value="Osprey"><span>Osprey</span></label>
-          <label class="option-item"><input type="radio" name="q10" value="Gregory"><span>Gregory</span></label>
-          <label class="option-item"><input type="radio" name="q10" value="Deuter"><span>Deuter</span></label>
-          <label class="option-item"><input type="radio" name="q10" value="REI Co-op"><span>REI Co-op</span></label>
-          <label class="option-item"><input type="radio" name="q10" value="The North Face"><span>The North Face</span></label>
-          <label class="option-item"><input type="radio" name="q10" value="ULA"><span>ULA (Ultralight Adventure Equipment)</span></label>
-          <label class="option-item"><input type="radio" name="q10" value="Hyperlite Mountain Gear"><span>Hyperlite Mountain Gear</span></label>
-          <label class="option-item"><input type="radio" name="q10" value="Granite Gear"><span>Granite Gear</span></label>
-          <label class="option-item"><input type="radio" name="q10" value="Zpacks"><span>Zpacks</span></label>
-          <label class="option-item"><input type="radio" name="q10" value="Other"><span>Other: <input type="text" id="q10-other" class="other-input" placeholder="Brand name"></span></label>
-        </div>
-      </div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q11</span>What is the capacity of your pack?</div>
-        <div class="options">
-          <label class="option-item"><input type="radio" name="q11" value="Under 40L"><span>Under 40L</span></label>
-          <label class="option-item"><input type="radio" name="q11" value="40-50L"><span>40&ndash;50L</span></label>
-          <label class="option-item"><input type="radio" name="q11" value="50-65L"><span>50&ndash;65L</span></label>
-          <label class="option-item"><input type="radio" name="q11" value="65-75L"><span>65&ndash;75L</span></label>
-          <label class="option-item"><input type="radio" name="q11" value="75L+"><span>75L+</span></label>
-        </div>
+  <div class="card">
+    <div class="sl">Section 2 &mdash; Fit &amp; Comfort</div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q4</span>How satisfied are you with how your current backpack fits?</div>
+      <div class="opts">
+        <label class="oi"><input type="radio" name="q4" value="Very satisfied"><span>Very satisfied &mdash; fits perfectly</span></label>
+        <label class="oi"><input type="radio" name="q4" value="Satisfied"><span>Satisfied &mdash; fits well with minor adjustments</span></label>
+        <label class="oi"><input type="radio" name="q4" value="Neutral"><span>Neutral &mdash; okay but not ideal</span></label>
+        <label class="oi"><input type="radio" name="q4" value="Dissatisfied"><span>Dissatisfied &mdash; noticeable fit issues</span></label>
+        <label class="oi"><input type="radio" name="q4" value="Very dissatisfied"><span>Very dissatisfied &mdash; does not fit well</span></label>
       </div>
     </div>
-
-    <div class="card">
-      <div class="section-label">Section 5 &mdash; Shopping Behavior</div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q12</span>When shopping for your current pack, what did you do? <em style="font-size:12px;color:var(--stone)">(Select all that apply)</em></div>
-        <div class="options">
-          <div class="sub-heading">In-Store</div>
-          <label class="option-item"><input type="checkbox" name="q12" value="Tried on with weight"><span>Tried on packs with weight loaded in them</span></label>
-          <label class="option-item"><input type="checkbox" name="q12" value="Tried on empty"><span>Tried on packs without weight</span></label>
-          <label class="option-item"><input type="checkbox" name="q12" value="Store fitting"><span>Worked with a store employee to get fitted</span></label>
-          <div class="sub-heading">Online</div>
-          <label class="option-item"><input type="checkbox" name="q12" value="Read reviews"><span>Read reviews extensively</span></label>
-          <label class="option-item"><input type="checkbox" name="q12" value="Watched videos"><span>Watched YouTube / tutorials</span></label>
-          <label class="option-item"><input type="checkbox" name="q12" value="Bought online blind"><span>Bought online without trying on first</span></label>
-          <label class="option-item"><input type="checkbox" name="q12" value="Brand reputation"><span>Bought based on brand reputation alone</span></label>
-          <div class="sub-heading">Other</div>
-          <label class="option-item"><input type="checkbox" name="q12" value="Asked community"><span>Asked friends / community for recommendations</span></label>
-          <label class="option-item"><input type="checkbox" name="q12" value="Bought on sale"><span>Bought whatever was on sale or available</span></label>
-        </div>
-      </div>
-
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q13</span>What were the most frustrating parts of finding the right backpack? <em style="font-size:12px;color:var(--stone)">(Select up to 3)</em></div>
-        <div class="options" id="q13-options">
-          <label class="option-item"><input type="checkbox" name="q13" value="Limited sizes"><span>Limited size options (mostly S/M/L only)</span></label>
-          <label class="option-item"><input type="checkbox" name="q13" value="Fit knowledge"><span>Difficulty understanding what proper fit feels like</span></label>
-          <label class="option-item"><input type="checkbox" name="q13" value="Too expensive"><span>Too expensive to try multiple packs ($200&ndash;400 each)</span></label>
-          <label class="option-item"><input type="checkbox" name="q13" value="No real test"><span>Cannot test with real weight before buying</span></label>
-          <label class="option-item"><input type="checkbox" name="q13" value="Conflicting info"><span>Conflicting info from different sources</span></label>
-          <label class="option-item"><input type="checkbox" name="q13" value="Gender fit"><span>Gender-specific packs do not fit my body</span></label>
-          <label class="option-item"><input type="checkbox" name="q13" value="Break-in time"><span>Takes too long to break in / adjust</span></label>
-          <label class="option-item"><input type="checkbox" name="q13" value="Body type"><span>Not enough options for my body type</span></label>
-          <label class="option-item"><input type="checkbox" name="q13" value="Nothing frustrating"><span>Nothing was particularly frustrating</span></label>
-        </div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q5</span>Fit issues experienced? <em style="font-size:12px;color:var(--stone)">(Select all that apply)</em></div>
+      <div class="opts">
+        <label class="oi"><input type="checkbox" name="q5" value="Shoulder pain"><span>Shoulder pain or pressure points</span></label>
+        <label class="oi"><input type="checkbox" name="q5" value="Neck pain"><span>Neck pain or discomfort</span></label>
+        <label class="oi"><input type="checkbox" name="q5" value="Hip belt misfit"><span>Hip belt does not sit correctly on hips</span></label>
+        <label class="oi"><input type="checkbox" name="q5" value="Torso length"><span>Pack too long or short for my torso</span></label>
+        <label class="oi"><input type="checkbox" name="q5" value="Strap width"><span>Shoulder straps too wide or narrow</span></label>
+        <label class="oi"><input type="checkbox" name="q5" value="Ride height"><span>Pack rides too high or low on my back</span></label>
+        <label class="oi"><input type="checkbox" name="q5" value="Weight dist"><span>Weight distribution feels uneven</span></label>
+        <label class="oi"><input type="checkbox" name="q5" value="Hip gap"><span>Hip belt gaps or does not make full contact</span></label>
+        <label class="oi"><input type="checkbox" name="q5" value="Spine curve"><span>Back panel does not match my spine curve</span></label>
+        <label class="oi"><input type="checkbox" name="q5" value="None"><span>None of the above</span></label>
       </div>
     </div>
-
-    <div class="card">
-      <div class="section-label">Section 6 &mdash; What Matters Most</div>
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q14</span>Drag to rank these factors in order of importance <em style="font-size:12px;color:var(--stone)">(1 = most important)</em></div>
-        <div class="rank-list" id="rank-list">
-          <div class="rank-item" draggable="true" data-val="Perfect fit for my body"><span class="rank-drag">&#9783;</span><span class="rank-num">1</span><span class="rank-text">Perfect fit for my body</span></div>
-          <div class="rank-item" draggable="true" data-val="Injury and pain prevention"><span class="rank-drag">&#9783;</span><span class="rank-num">2</span><span class="rank-text">Injury / pain prevention</span></div>
-          <div class="rank-item" draggable="true" data-val="Carry heavy loads comfortably"><span class="rank-drag">&#9783;</span><span class="rank-num">3</span><span class="rank-text">Carry heavy loads comfortably</span></div>
-          <div class="rank-item" draggable="true" data-val="Pack weight"><span class="rank-drag">&#9783;</span><span class="rank-num">4</span><span class="rank-text">Weight of the pack itself</span></div>
-          <div class="rank-item" draggable="true" data-val="Durability"><span class="rank-drag">&#9783;</span><span class="rank-num">5</span><span class="rank-text">Durability</span></div>
-          <div class="rank-item" draggable="true" data-val="Pockets and organization"><span class="rank-drag">&#9783;</span><span class="rank-num">6</span><span class="rank-text">Pockets / organization</span></div>
-          <div class="rank-item" draggable="true" data-val="Price"><span class="rank-drag">&#9783;</span><span class="rank-num">7</span><span class="rank-text">Price</span></div>
-          <div class="rank-item" draggable="true" data-val="Brand reputation"><span class="rank-drag">&#9783;</span><span class="rank-num">8</span><span class="rank-text">Brand reputation</span></div>
-        </div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q6</span>Pain or injury caused by a poorly fitting backpack?</div>
+      <div class="opts">
+        <label class="oi"><input type="radio" name="q6" value="Yes multiple"><span>Yes, multiple times</span></label>
+        <label class="oi"><input type="radio" name="q6" value="Yes once"><span>Yes, once or twice</span></label>
+        <label class="oi"><input type="radio" name="q6" value="Maybe"><span>Maybe / not sure</span></label>
+        <label class="oi"><input type="radio" name="q6" value="No"><span>No, never</span></label>
       </div>
-    </div>
-
-    <div class="card">
-      <div class="section-label">Section 7 &mdash; Open Feedback</div>
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q15</span>If you could change ONE thing about how backpacks are designed or sold, what would it be?</div>
-        <textarea id="q15-text" class="text-input" rows="4" placeholder="Share your thoughts..."></textarea>
-      </div>
-    </div>
-
-    <button type="button" onclick="goTo('sec-followup')" class="btn-primary" style="margin-bottom:16px">Continue &rarr;</button>
-  </div>
-
-  <!-- ── FOLLOW UP ── -->
-  <div class="survey-section" id="sec-followup" style="display:none">
-    <div class="card">
-      <div class="section-label">Follow-Up &mdash; Optional</div>
-      <div class="question">
-        <div class="q-label"><span class="q-num">Q16</span>Would you be open to a 15-minute conversation about your backpack experience?</div>
-        <div class="options">
-          <label class="option-item"><input type="radio" name="q16" value="Yes"><span>Yes, I am interested</span></label>
-          <label class="option-item"><input type="radio" name="q16" value="Maybe"><span>Maybe, depending on timing</span></label>
-          <label class="option-item"><input type="radio" name="q16" value="No"><span>No thanks</span></label>
-        </div>
-      </div>
-      <div id="contact-fields" style="display:none; margin-top:16px">
-        <div style="display:grid; gap:10px">
-          <input type="text" id="contact-name" class="text-input" placeholder="Name">
-          <input type="email" id="contact-email" class="text-input" placeholder="Email address">
-        </div>
-        <p style="font-size:11.5px; color:var(--stone); margin-top:8px; font-style:italic">Contact info used only for follow-up and kept confidential.</p>
-      </div>
-      <button type="button" onclick="handleSubmit()" class="btn-primary" style="margin-top:16px">Submit Survey &#10003;</button>
-      <div id="submit-status" class="submit-status"></div>
     </div>
   </div>
-
-  <!-- ── THANK YOU ── -->
-  <div class="survey-section" id="sec-thankyou" style="display:none">
-    <div class="thankyou-card">
-      <span class="check">&#127956;</span>
-      <h2>Thank you for your time!</h2>
-      <p>Your insights will directly help shape gear that works better for real bodies on real trails. Happy adventuring!</p>
+  <div class="card">
+    <div class="sl">Section 3 &mdash; Shopping Experience</div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q7</span>How many backpacks did you try before finding one that worked?</div>
+      <div class="opts">
+        <label class="oi"><input type="radio" name="q7" value="1"><span>1 &mdash; first one worked great</span></label>
+        <label class="oi"><input type="radio" name="q7" value="2-3"><span>2&ndash;3</span></label>
+        <label class="oi"><input type="radio" name="q7" value="4-5"><span>4&ndash;5</span></label>
+        <label class="oi"><input type="radio" name="q7" value="6-10"><span>6&ndash;10</span></label>
+        <label class="oi"><input type="radio" name="q7" value="10+"><span>More than 10</span></label>
+        <label class="oi"><input type="radio" name="q7" value="Still searching"><span>Still have not found one that works</span></label>
+      </div>
+    </div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q8</span>How much MORE would you pay for a significantly better-fitting pack vs. a standard $250 backpack?</div>
+      <div class="hint">Think of this like a personalized insole &mdash; precision-fitted to reduce pain and injury.</div>
+      <div class="opts">
+        <label class="oi"><input type="radio" name="q8" value="Nothing more"><span>I would not pay more</span></label>
+        <label class="oi"><input type="radio" name="q8" value="$25-50 more"><span>$25&ndash;$50 more ($275&ndash;$300 total)</span></label>
+        <label class="oi"><input type="radio" name="q8" value="$50-100 more"><span>$50&ndash;$100 more ($300&ndash;$350 total)</span></label>
+        <label class="oi"><input type="radio" name="q8" value="$100-150 more"><span>$100&ndash;$150 more ($350&ndash;$400 total)</span></label>
+        <label class="oi"><input type="radio" name="q8" value="$150-250 more"><span>$150&ndash;$250 more ($400&ndash;$500 total)</span></label>
+        <label class="oi"><input type="radio" name="q8" value="$250+ more"><span>$250+ more ($500+ total)</span></label>
+      </div>
     </div>
   </div>
+  <div class="tc">
+    <h3>Part 1 done!</h3>
+    <p>A few more questions? About 3 more minutes.</p>
+    <div class="br">
+      <button type="button" class="bp" onclick="show('s2')">Yes, continue to Part 2 &rarr;</button>
+      <button type="button" class="bs" onclick="show('s3')">No thanks</button>
+    </div>
+  </div>
+</div>
 
-</div><!-- /container -->
+<!-- PART 2 — hidden -->
+<div id="s2" style="display:none">
+  <div class="pd"><div class="pb">Part 2 of 2</div><h2>Deeper Dive</h2><p>A few more questions about your pack and shopping experience.</p></div>
+  <div class="card">
+    <div class="sl">Section 4 &mdash; Your Current Pack</div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q10</span>What brand is your primary backpacking pack?</div>
+      <div class="opts">
+        <label class="oi"><input type="radio" name="q10" value="Osprey"><span>Osprey</span></label>
+        <label class="oi"><input type="radio" name="q10" value="Gregory"><span>Gregory</span></label>
+        <label class="oi"><input type="radio" name="q10" value="Deuter"><span>Deuter</span></label>
+        <label class="oi"><input type="radio" name="q10" value="REI Co-op"><span>REI Co-op</span></label>
+        <label class="oi"><input type="radio" name="q10" value="The North Face"><span>The North Face</span></label>
+        <label class="oi"><input type="radio" name="q10" value="ULA"><span>ULA (Ultralight Adventure Equipment)</span></label>
+        <label class="oi"><input type="radio" name="q10" value="Hyperlite"><span>Hyperlite Mountain Gear</span></label>
+        <label class="oi"><input type="radio" name="q10" value="Granite Gear"><span>Granite Gear</span></label>
+        <label class="oi"><input type="radio" name="q10" value="Zpacks"><span>Zpacks</span></label>
+        <label class="oi"><input type="radio" name="q10" value="Other"><span>Other: <input type="text" id="q10o" class="oth" placeholder="Brand name"></span></label>
+      </div>
+    </div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q11</span>Capacity of your pack?</div>
+      <div class="opts">
+        <label class="oi"><input type="radio" name="q11" value="Under 40L"><span>Under 40L</span></label>
+        <label class="oi"><input type="radio" name="q11" value="40-50L"><span>40&ndash;50L</span></label>
+        <label class="oi"><input type="radio" name="q11" value="50-65L"><span>50&ndash;65L</span></label>
+        <label class="oi"><input type="radio" name="q11" value="65-75L"><span>65&ndash;75L</span></label>
+        <label class="oi"><input type="radio" name="q11" value="75L+"><span>75L+</span></label>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sl">Section 5 &mdash; Shopping Behavior</div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q12</span>When shopping for your pack, what did you do? <em style="font-size:12px;color:var(--stone)">(Select all)</em></div>
+      <div class="opts">
+        <div class="sh">In-Store</div>
+        <label class="oi"><input type="checkbox" name="q12" value="Tried with weight"><span>Tried on packs with weight loaded</span></label>
+        <label class="oi"><input type="checkbox" name="q12" value="Tried empty"><span>Tried on packs without weight</span></label>
+        <label class="oi"><input type="checkbox" name="q12" value="Store fitting"><span>Worked with store employee to get fitted</span></label>
+        <div class="sh">Online</div>
+        <label class="oi"><input type="checkbox" name="q12" value="Read reviews"><span>Read reviews extensively</span></label>
+        <label class="oi"><input type="checkbox" name="q12" value="Watched videos"><span>Watched YouTube / tutorials</span></label>
+        <label class="oi"><input type="checkbox" name="q12" value="Bought online blind"><span>Bought online without trying on</span></label>
+        <label class="oi"><input type="checkbox" name="q12" value="Brand reputation"><span>Bought based on brand reputation alone</span></label>
+        <div class="sh">Other</div>
+        <label class="oi"><input type="checkbox" name="q12" value="Community"><span>Asked friends / community</span></label>
+        <label class="oi"><input type="checkbox" name="q12" value="On sale"><span>Bought whatever was on sale</span></label>
+      </div>
+    </div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q13</span>Most frustrating parts of finding the right backpack? <em style="font-size:12px;color:var(--stone)">(Up to 3)</em></div>
+      <div class="opts">
+        <label class="oi"><input type="checkbox" name="q13" value="Limited sizes"><span>Limited size options (mostly S/M/L only)</span></label>
+        <label class="oi"><input type="checkbox" name="q13" value="Fit knowledge"><span>Difficulty understanding what proper fit feels like</span></label>
+        <label class="oi"><input type="checkbox" name="q13" value="Too expensive"><span>Too expensive to try multiple packs</span></label>
+        <label class="oi"><input type="checkbox" name="q13" value="No real test"><span>Cannot test with real weight before buying</span></label>
+        <label class="oi"><input type="checkbox" name="q13" value="Conflicting info"><span>Conflicting info from different sources</span></label>
+        <label class="oi"><input type="checkbox" name="q13" value="Gender fit"><span>Gender-specific packs do not fit my body</span></label>
+        <label class="oi"><input type="checkbox" name="q13" value="Break-in"><span>Takes too long to break in / adjust</span></label>
+        <label class="oi"><input type="checkbox" name="q13" value="Body type"><span>Not enough options for my body type</span></label>
+        <label class="oi"><input type="checkbox" name="q13" value="Nothing"><span>Nothing was particularly frustrating</span></label>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sl">Section 6 &mdash; What Matters Most</div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q14</span>Drag to rank in order of importance <em style="font-size:12px;color:var(--stone)">(1 = most important)</em></div>
+      <div class="rlist" id="rl">
+        <div class="ri" draggable="true" data-v="Perfect fit"><span class="rd">&#9783;</span><span class="rn">1</span><span class="rt">Perfect fit for my body</span></div>
+        <div class="ri" draggable="true" data-v="Injury prevention"><span class="rd">&#9783;</span><span class="rn">2</span><span class="rt">Injury / pain prevention</span></div>
+        <div class="ri" draggable="true" data-v="Heavy loads"><span class="rd">&#9783;</span><span class="rn">3</span><span class="rt">Carry heavy loads comfortably</span></div>
+        <div class="ri" draggable="true" data-v="Pack weight"><span class="rd">&#9783;</span><span class="rn">4</span><span class="rt">Weight of the pack itself</span></div>
+        <div class="ri" draggable="true" data-v="Durability"><span class="rd">&#9783;</span><span class="rn">5</span><span class="rt">Durability</span></div>
+        <div class="ri" draggable="true" data-v="Organization"><span class="rd">&#9783;</span><span class="rn">6</span><span class="rt">Pockets / organization</span></div>
+        <div class="ri" draggable="true" data-v="Price"><span class="rd">&#9783;</span><span class="rn">7</span><span class="rt">Price</span></div>
+        <div class="ri" draggable="true" data-v="Brand"><span class="rd">&#9783;</span><span class="rn">8</span><span class="rt">Brand reputation</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sl">Section 7 &mdash; Open Feedback</div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q15</span>If you could change ONE thing about how backpacks are designed or sold, what would it be?</div>
+      <textarea id="q15" class="ti" rows="4" placeholder="Share your thoughts..."></textarea>
+    </div>
+  </div>
+  <button type="button" class="bp" onclick="show('s3')" style="margin-bottom:16px">Continue &rarr;</button>
+</div>
 
+<!-- FOLLOW UP — hidden -->
+<div id="s3" style="display:none">
+  <div class="card">
+    <div class="sl">Follow-Up &mdash; Optional</div>
+    <div class="q">
+      <div class="ql"><span class="qn">Q16</span>Open to a 15-minute conversation about your experience?</div>
+      <div class="opts">
+        <label class="oi"><input type="radio" name="q16" value="Yes"><span>Yes, I am interested</span></label>
+        <label class="oi"><input type="radio" name="q16" value="Maybe"><span>Maybe, depending on timing</span></label>
+        <label class="oi"><input type="radio" name="q16" value="No"><span>No thanks</span></label>
+      </div>
+    </div>
+    <div id="cf" style="display:none;margin-top:16px">
+      <div style="display:grid;gap:10px">
+        <input type="text" id="cn" class="ti" placeholder="Name">
+        <input type="email" id="ce" class="ti" placeholder="Email address">
+      </div>
+      <p style="font-size:11.5px;color:var(--stone);margin-top:8px;font-style:italic">Used only for follow-up. Kept confidential.</p>
+    </div>
+    <button type="button" class="bp" onclick="submit()" style="margin-top:16px">Submit Survey &#10003;</button>
+    <div id="ss" class="ss"></div>
+  </div>
+</div>
+
+<!-- THANK YOU — hidden -->
+<div id="s4" style="display:none">
+  <div class="ty">
+    <span class="ck">&#127956;</span>
+    <h2>Thank you for your time!</h2>
+    <p>Your insights will directly help shape gear that works better for real bodies on real trails. Happy adventuring!</p>
+  </div>
+</div>
+
+</div>
 <script>
-var SCRIPT_URL = https://script.google.com/macros/s/AKfycbzuB4G8u2ERFmXmfWm714KrEJuyggLQCguOVoweJqaZ115Ngjpx9BOXKtHi7OryKwBa/exec;
+// ── PASTE YOUR APPS SCRIPT URL BELOW ──
+var URL = "PASTE_YOUR_SCRIPT_URL_HERE";
 
-function goTo(id) {
-  var all = document.querySelectorAll('.survey-section');
-  for (var i = 0; i < all.length; i++) {
-    all[i].style.display = 'none';
+function show(id) {
+  var ids = ['s1','s2','s3','s4'];
+  for (var i = 0; i < ids.length; i++) {
+    document.getElementById(ids[i]).style.display = 'none';
   }
-  var el = document.getElementById(id);
-  if (el) {
-    el.style.display = 'block';
-    window.scrollTo(0, 0);
-  }
+  document.getElementById(id).style.display = 'block';
+  window.scrollTo(0, 0);
 }
 
 document.addEventListener('change', function(e) {
-  var input = e.target;
-  var item = input.closest('.option-item');
+  var inp = e.target, item = inp.closest('.oi');
   if (!item) return;
-  if (input.type === 'radio') {
-    var group = document.querySelectorAll('input[name="' + input.name + '"]');
-    for (var i = 0; i < group.length; i++) {
-      group[i].closest('.option-item').classList.remove('selected');
-    }
-    item.classList.add('selected');
-    if (input.name === 'q16') {
-      var cf = document.getElementById('contact-fields');
-      cf.style.display = (input.value === 'Yes' || input.value === 'Maybe') ? 'block' : 'none';
-    }
+  if (inp.type === 'radio') {
+    document.querySelectorAll('input[name="'+inp.name+'"]').forEach(function(x) { x.closest('.oi').classList.remove('sel'); });
+    item.classList.add('sel');
+    if (inp.name === 'q16') document.getElementById('cf').style.display = (inp.value==='Yes'||inp.value==='Maybe') ? 'block' : 'none';
   }
-  if (input.type === 'checkbox') {
-    if (input.name === 'q13' && input.checked) {
-      var checked = document.querySelectorAll('input[name="q13"]:checked');
-      if (checked.length > 3) { input.checked = false; return; }
-    }
-    item.classList.toggle('selected', input.checked);
+  if (inp.type === 'checkbox') {
+    if (inp.name === 'q13' && inp.checked && document.querySelectorAll('input[name="q13"]:checked').length > 3) { inp.checked=false; return; }
+    item.classList.toggle('sel', inp.checked);
   }
 });
 
-var rankList = document.getElementById('rank-list');
-var dragSrc = null;
-if (rankList) {
-  rankList.addEventListener('dragstart', function(e) {
-    dragSrc = e.target.closest('.rank-item');
-    if (dragSrc) dragSrc.style.opacity = '0.4';
-  });
-  rankList.addEventListener('dragend', function() {
-    if (dragSrc) dragSrc.style.opacity = '';
-    var items = document.querySelectorAll('#rank-list .rank-item');
-    for (var i = 0; i < items.length; i++) items[i].querySelector('.rank-num').textContent = i + 1;
-  });
-  rankList.addEventListener('dragover', function(e) {
+var rl = document.getElementById('rl'), ds = null;
+if (rl) {
+  rl.addEventListener('dragstart', function(e) { ds = e.target.closest('.ri'); if(ds) ds.style.opacity='.4'; });
+  rl.addEventListener('dragend',   function()  { if(ds) ds.style.opacity=''; renum(); });
+  rl.addEventListener('dragover',  function(e) {
     e.preventDefault();
-    var over = e.target.closest('.rank-item');
-    if (over && over !== dragSrc) {
-      var r = over.getBoundingClientRect();
-      rankList.insertBefore(dragSrc, e.clientY < r.top + r.height / 2 ? over : over.nextSibling);
-    }
+    var ov = e.target.closest('.ri');
+    if (ov && ov !== ds) { var r = ov.getBoundingClientRect(); rl.insertBefore(ds, e.clientY < r.top+r.height/2 ? ov : ov.nextSibling); }
   });
 }
+function renum() { document.querySelectorAll('#rl .ri').forEach(function(x,i){x.querySelector('.rn').textContent=i+1;}); }
 
-function handleSubmit() {
-  var btn = document.querySelector('[onclick="handleSubmit()"]');
-  var st = document.getElementById('submit-status');
-  if (btn) btn.disabled = true;
+function g(n) { var e=document.querySelector('input[name="'+n+'"]:checked'); return e?e.value:''; }
+function gs(n) { var r=[]; document.querySelectorAll('input[name="'+n+'"]:checked').forEach(function(e){r.push(e.value);}); return r; }
+
+function submit() {
+  var btn = document.querySelector('[onclick="submit()"]');
+  var st  = document.getElementById('ss');
+  if(btn) btn.disabled = true;
+  var q10 = g('q10');
+  var oth = document.getElementById('q10o');
+  if (q10==='Other' && oth && oth.value.trim()) q10 = 'Other: '+oth.value.trim();
+  var rank = [];
+  document.querySelectorAll('#rl .ri').forEach(function(x){rank.push(x.dataset.v);});
   var data = {
-    q1: val('q1'), q2: vals('q2'), q3: val('q3'), q4: val('q4'),
-    q5: vals('q5'), q6: val('q6'), q7: val('q7'), q8: val('q8'),
-    q10: val('q10'), q11: val('q11'), q12: vals('q12'), q13: vals('q13'),
-    q14: (function() {
-      var its = document.querySelectorAll('#rank-list .rank-item'), v = [];
-      for (var i = 0; i < its.length; i++) v.push(its[i].dataset.val);
-      return v;
-    })(),
-    q15: (document.getElementById('q15-text') || {value:''}).value,
-    q16: val('q16'),
-    name: (document.getElementById('contact-name') || {value:''}).value,
-    email: (document.getElementById('contact-email') || {value:''}).value
+    q1:g('q1'), q2:gs('q2'), q3:g('q3'), q4:g('q4'), q5:gs('q5'),
+    q6:g('q6'), q7:g('q7'), q8:g('q8'), q10:q10, q11:g('q11'),
+    q12:gs('q12'), q13:gs('q13'), q14:rank,
+    q15:(document.getElementById('q15')||{}).value||'',
+    q16:g('q16'),
+    name: (document.getElementById('cn')||{}).value||'',
+    email:(document.getElementById('ce')||{}).value||''
   };
-  if (SCRIPT_URL === 'PASTE_YOUR_SCRIPT_URL_HERE') {
-    goTo('sec-thankyou'); return;
-  }
-  fetch(SCRIPT_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)})
-    .then(function() { goTo('sec-thankyou'); })
-    .catch(function() {
-      if (btn) btn.disabled = false;
-      if (st) { st.textContent = 'Something went wrong - please try again.'; st.className = 'submit-status error'; }
-    });
+  if (URL === 'PASTE_YOUR_SCRIPT_URL_HERE') { show('s4'); return; }
+  fetch(URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+    .then(function(){show('s4');})
+    .catch(function(){ if(btn)btn.disabled=false; if(st){st.textContent='Something went wrong - please try again.';st.className='ss err';} });
 }
-function val(n) { var el = document.querySelector('input[name="'+n+'"]:checked'); return el ? el.value : ''; }
-function vals(n) { var els = document.querySelectorAll('input[name="'+n+'"]:checked'), v = []; for (var i=0;i<els.length;i++) v.push(els[i].value); return v; }
 </script>
-
 </body>
 </html>
