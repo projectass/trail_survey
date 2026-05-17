@@ -366,7 +366,7 @@ function submit() {
     name: (document.getElementById('cn')||{}).value||'',
     email:(document.getElementById('ce')||{}).value||''
   };
-  if (URL === 'PASTE_YOUR_SCRIPT_URL_HERE') { show('s4'); return; }
+  if (URL === "https://script.google.com/macros/s/AKfycbzuB4G8u2ERFmXmfWm714KrEJuyggLQCguOVoweJqaZ115Ngjpx9BOXKtHi7OryKwBa/exec") { show('s4'); return; }
   fetch(URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
     .then(function(){show('s4');})
     .catch(function(){ if(btn)btn.disabled=false; if(st){st.textContent='Something went wrong - please try again.';st.className='ss err';} });
