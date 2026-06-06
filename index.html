@@ -100,11 +100,11 @@ label.oi span{font-size:13.5px;color:var(--forest);line-height:1.4}
     <div class="q">
       <div class="ql"><span class="qn">Q3</span>Typical weight you carry (pack + gear + food)?</div>
       <div class="opts">
-        <label class="oi"><input type="radio" name="q3" value="Under 20 lbs"><span>Under 20 lbs &mdash; ultralight</span></label>
-        <label class="oi"><input type="radio" name="q3" value="20-30 lbs"><span>20&ndash;30 lbs &mdash; lightweight</span></label>
-        <label class="oi"><input type="radio" name="q3" value="30-40 lbs"><span>30&ndash;40 lbs &mdash; moderate</span></label>
-        <label class="oi"><input type="radio" name="q3" value="40-50 lbs"><span>40&ndash;50 lbs &mdash; heavy</span></label>
-        <label class="oi"><input type="radio" name="q3" value="50+ lbs"><span>50+ lbs &mdash; expedition</span></label>
+        <label class="oi"><input type="checkbox" name="q3" value="Under 20 lbs"><span>Under 20 lbs &mdash; ultralight</span></label>
+        <label class="oi"><input type="checkbox" name="q3" value="20-30 lbs"><span>20&ndash;30 lbs &mdash; lightweight</span></label>
+        <label class="oi"><input type="checkbox" name="q3" value="30-40 lbs"><span>30&ndash;40 lbs &mdash; moderate</span></label>
+        <label class="oi"><input type="checkbox" name="q3" value="40-50 lbs"><span>40&ndash;50 lbs &mdash; heavy</span></label>
+        <label class="oi"><input type="checkbox" name="q3" value="50+ lbs"><span>50+ lbs &mdash; expedition</span></label>
       </div>
     </div>
   </div>
@@ -187,28 +187,28 @@ label.oi span{font-size:13.5px;color:var(--forest);line-height:1.4}
   <div class="card">
     <div class="sl">Section 4 &mdash; Your Current Pack</div>
     <div class="q">
-      <div class="ql"><span class="qn">Q10</span>What brand is your primary backpacking pack?</div>
+      <div class="ql"><span class="qn">Q10</span>What brand is your primary backpacking pack(s)?</div>
       <div class="opts">
-        <label class="oi"><input type="radio" name="q10" value="Osprey"><span>Osprey</span></label>
-        <label class="oi"><input type="radio" name="q10" value="Gregory"><span>Gregory</span></label>
-        <label class="oi"><input type="radio" name="q10" value="Deuter"><span>Deuter</span></label>
-        <label class="oi"><input type="radio" name="q10" value="REI Co-op"><span>REI Co-op</span></label>
-        <label class="oi"><input type="radio" name="q10" value="The North Face"><span>The North Face</span></label>
-        <label class="oi"><input type="radio" name="q10" value="ULA"><span>ULA (Ultralight Adventure Equipment)</span></label>
-        <label class="oi"><input type="radio" name="q10" value="Hyperlite"><span>Hyperlite Mountain Gear</span></label>
-        <label class="oi"><input type="radio" name="q10" value="Granite Gear"><span>Granite Gear</span></label>
-        <label class="oi"><input type="radio" name="q10" value="Zpacks"><span>Zpacks</span></label>
-        <label class="oi"><input type="radio" name="q10" value="Other"><span>Other: <input type="text" id="q10o" class="oth" placeholder="Brand name"></span></label>
+        <label class="oi"><input type="checkbox" name="q10" value="Osprey"><span>Osprey</span></label>
+        <label class="oi"><input type="checkbox" name="q10" value="Gregory"><span>Gregory</span></label>
+        <label class="oi"><input type="checkbox" name="q10" value="Deuter"><span>Deuter</span></label>
+        <label class="oi"><input type="checkbox" name="q10" value="REI Co-op"><span>REI Co-op</span></label>
+        <label class="oi"><input type="checkbox" name="q10" value="The North Face"><span>The North Face</span></label>
+        <label class="oi"><input type="checkbox" name="q10" value="ULA"><span>ULA (Ultralight Adventure Equipment)</span></label>
+        <label class="oi"><input type="checkbox" name="q10" value="Hyperlite"><span>Hyperlite Mountain Gear</span></label>
+        <label class="oi"><input type="checkbox" name="q10" value="Granite Gear"><span>Granite Gear</span></label>
+        <label class="oi"><input type="checkbox" name="q10" value="Zpacks"><span>Zpacks</span></label>
+        <label class="oi"><input type="checkbox" name="q10" value="Other"><span>Other: <input type="text" id="q10o" class="oth" placeholder="Brand name"></span></label>
       </div>
     </div>
     <div class="q">
-      <div class="ql"><span class="qn">Q11</span>Capacity of your pack?</div>
+      <div class="ql"><span class="qn">Q11</span>Capacity of your pack(s)?</div>
       <div class="opts">
-        <label class="oi"><input type="radio" name="q11" value="Under 40L"><span>Under 40L</span></label>
-        <label class="oi"><input type="radio" name="q11" value="40-50L"><span>40&ndash;50L</span></label>
-        <label class="oi"><input type="radio" name="q11" value="50-65L"><span>50&ndash;65L</span></label>
-        <label class="oi"><input type="radio" name="q11" value="65-75L"><span>65&ndash;75L</span></label>
-        <label class="oi"><input type="radio" name="q11" value="75L+"><span>75L+</span></label>
+        <label class="oi"><input type="checkbox" name="q11" value="Under 40L"><span>Under 40L</span></label>
+        <label class="oi"><input type="checkbox" name="q11" value="40-50L"><span>40&ndash;50L</span></label>
+        <label class="oi"><input type="checkbox" name="q11" value="50-65L"><span>50&ndash;65L</span></label>
+        <label class="oi"><input type="checkbox" name="q11" value="65-75L"><span>65&ndash;75L</span></label>
+        <label class="oi"><input type="checkbox" name="q11" value="75L+"><span>75L+</span></label>
       </div>
     </div>
   </div>
@@ -342,6 +342,29 @@ if (rl) {
     var ov = e.target.closest('.ri');
     if (ov && ov !== ds) { var r = ov.getBoundingClientRect(); rl.insertBefore(ds, e.clientY < r.top+r.height/2 ? ov : ov.nextSibling); }
   });
+  rl.addEventListener('touchstart', function(e) {
+    ds = e.target.closest('.ri');
+    if (ds) ds.style.opacity = '.4';
+  }, {passive: true});
+  rl.addEventListener('touchend', function() {
+    if (ds) ds.style.opacity = '';
+    renum();
+    ds = null;
+  });
+  rl.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    if (!ds) return;
+    var t = e.touches[0];
+    var items = rl.querySelectorAll('.ri');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i] === ds) continue;
+      var r = items[i].getBoundingClientRect();
+      if (t.clientY >= r.top && t.clientY <= r.bottom) {
+        rl.insertBefore(ds, t.clientY < r.top + r.height / 2 ? items[i] : items[i].nextSibling);
+        break;
+      }
+    }
+  }, {passive: false});
 }
 function renum() { document.querySelectorAll('#rl .ri').forEach(function(x,i){x.querySelector('.rn').textContent=i+1;}); }
 
